@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Kafka - Twitter App</title>
+    </head>
+
+    <body>
+        <h1>Kafka - Twitter App</h1>
+        <h3>Enter a search term</h3>
+
+        <form id="topic_form" method="post" action="{% url 'Analyzer:process' %}">
+
+            {% csrf_token %}
+
+
+            {% for field in form.visible_fields %}
+                {{ field }}
+            {% endfor %}
+
+            <input type="submit" name="Create Topic" value="Create Topic" />
+        </form>
+    </body>
+
+</html>
