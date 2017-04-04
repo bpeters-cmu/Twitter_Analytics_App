@@ -1,8 +1,15 @@
-from .models import TweetModel
+from .tweet import Tweet
+from django.core.cache import cache
 
 
-def insert_tweet(status):
+class TweetDAO(object):
 
-    tweet = TweetModel(user_name=status.user.name, tweet_text=status.text,
-                       user_location=status.user.location, verified_user=status.user.verified)
-    tweet.save()
+    @staticmethod
+    def insert_tweet(tweet):
+        tweet_map = Tweet.to_map(tweet)
+        cache.set(tweet.tweet_id, tweet_map)
+
+    @staticmethod
+    def get_tweet(tweet_id):
+        return cache.get(tweet_id)
+
