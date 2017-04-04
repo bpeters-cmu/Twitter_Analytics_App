@@ -1,8 +1,9 @@
 import logging
-import tweet_dao
 import tweepy
 from tweepy.api import API
 from kafka import KafkaProducer
+from .tweet_dao import TweetDAO
+from .tweet import Tweet
 
 
 class TwitterAccess(object):
@@ -35,7 +36,9 @@ class MyStreamListener(tweepy.StreamListener):
         self.logger = logging.getLogger(__name__)
 
     def on_status(self, status):
-        tweet_dao.insert_tweet(status)
+        tweet = Tweet(tweet_id=status.id, user_name=status.user.name, text=status.text, location=status.user.location,
+                      verified_user=status.user.verified)
+        TweetDAO.insert_tweet(tweet)
         if status.user.location is not None:
             self.logger.debug('location: {}'.format(status.user.location))
             self.producer.send(self.topic, status.user.location.encode())
@@ -44,3 +47,5 @@ class MyStreamListener(tweepy.StreamListener):
     def on_error(self, status_code):
         if status_code == 420:
             return False
+
+
