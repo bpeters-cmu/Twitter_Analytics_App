@@ -3,7 +3,6 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from kafka import KafkaConsumer
 from kafka import TopicPartition
-from django.shortcuts import render
 from Analyzer.forms import TopicForm
 from .twitter_handler import TwitterAccess
 
